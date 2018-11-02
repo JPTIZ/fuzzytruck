@@ -1,6 +1,6 @@
 CONTEST := fuzzyTruckContest
 
-.PHONY: client
+.PHONY: socket
 
 MAKE := make --no-print-directory
 
@@ -10,8 +10,8 @@ default:
 server:
 	java -cp ${CONTEST}/bin:${CONTEST}/lib/forms.jar Server
 
-client:
-	@$(MAKE) -C client
+socket:
+	@$(MAKE) -C socket
 
 truck:
 	@echo "Euro-truck super composer...START!"

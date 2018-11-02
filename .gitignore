@@ -5,3 +5,4 @@ tip.cpp
 supersender
 
 *.class
+**/*.o
