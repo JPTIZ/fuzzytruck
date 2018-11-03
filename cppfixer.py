@@ -1,3 +1,7 @@
+'''
+Module for separating .cpp definitions into .h + .cpp and applies some styling.
+Not meant to be beautiful, just functional.
+'''
 import re
 
 from sys import argv
@@ -87,8 +91,15 @@ def organize_includes(contents: str, output: str):
         i += 1
 
     includes = '\n'.join(includes + [f'#include "{output}.h"'])
-    lines = '\n'.join(lines)
-    return f'{includes}\n{lines}'
+
+    for i, line in enumerate(lines):
+        if line.strip():
+            lines = lines[i:]
+            break
+
+    lines = '\n'.join(lines).strip()
+
+    return f'{includes}\n\n{lines}'
 
 
 def remove_main(contents: str, output: str = ''):
@@ -96,6 +107,45 @@ def remove_main(contents: str, output: str = ''):
     for i, line in enumerate(lines):
         if line.startswith('int main'):
             return '\n'.join(lines[:i])
+
+
+def fix_spaces(contents: str, output: str = ''):
+    replaces = [
+        ('\( ', '('),
+        (' \)', ')'),
+        (r'return \((.+)\);', lambda m: f'return {m.group(1)};'),
+        ('\t{ (.+) }',
+         lambda m: (
+             ' {\n'
+             f'    {m.group(1)}'
+             '\n}'
+         )),
+        ('\t', '    '),
+    ]
+
+    for pat, replace in replaces:
+        contents = re.sub(pat, replace, contents)
+
+    return contents
+
+
+def use_auto(contents: str, output: str = ''):
+    return re.sub(r'\w+ (\w+) = (.*);',
+                  lambda m: f'auto {m.group(1)} = {m.group(2)};',
+                  contents)
+
+
+def insert_namespace(contents: str, output: str = ''):
+    lines = contents.splitlines()
+
+    for i, line in enumerate(lines):
+        if not line.startswith('#include'):
+            return '\n'.join(
+                lines[:i]
+                + ['\nnamespace fuzzytruck {\n']
+                + lines[i:]
+                + ['\n}']
+            )
 
 
 if __name__ == '__main__':
@@ -110,11 +160,14 @@ if __name__ == '__main__':
         contents = f.read()
 
     operations = [
-        organize_includes,
         remove_comments,
+        organize_includes,
         uncamel,
         camel_classes,
         remove_main,
+        fix_spaces,
+        use_auto,
+        insert_namespace,
     ]
 
     for operation in operations:
@@ -131,6 +184,7 @@ if __name__ == '__main__':
         f.write(
             f'#ifndef {tag}\n'
             f'#define {tag}\n'
+            '\nnamespace fuzzytruck {\n'
             f'\n{welp}\n'
-            '#endif'
+            '\n}\n\n#endif'
         )
