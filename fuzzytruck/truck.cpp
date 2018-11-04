@@ -54,7 +54,7 @@ void FunctionBlockTruck::calc_truck_rules() {
     if(degree_of_support_3 > 0) {
         for (auto i = 0 ; i < 1000 ; i++) {
             auto x = 0.0 + i * 0.03;
-            auto membership = membership_action_turn_left(x);
+            auto membership = membership_action_turn_right(x);
             auto y = rule_activation_method_min(degree_of_support_3 , membership);
             defuzzify_action[i] += rule_accumulation_method_max(defuzzify_action[i], y);
         }
@@ -64,7 +64,7 @@ void FunctionBlockTruck::calc_truck_rules() {
     if(degree_of_support_4 > 0) {
         for (auto i = 0 ; i < 1000 ; i++) {
             auto x = 0.0 + i * 0.03;
-            auto membership = membership_action_turn_left(x);
+            auto membership = membership_action_turn_right(x);
             auto y = rule_activation_method_min(degree_of_support_4 , membership);
             defuzzify_action[i] += rule_accumulation_method_max(defuzzify_action[i], y);
         }
@@ -74,7 +74,7 @@ void FunctionBlockTruck::calc_truck_rules() {
     if(degree_of_support_5 > 0) {
         for (auto i = 0 ; i < 1000 ; i++) {
             auto x = 0.0 + i * 0.03;
-            auto membership = membership_action_turn_right(x);
+            auto membership = membership_action_turn_left(x);
             auto y = rule_activation_method_min(degree_of_support_5 , membership);
             defuzzify_action[i] += rule_accumulation_method_max(defuzzify_action[i], y);
         }

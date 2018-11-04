@@ -52,9 +52,9 @@ RULEBLOCK truck_rules
 
     RULE  1: IF x IS too_left  AND direction IS southeast THEN action IS turn_none;
     RULE  2: IF x IS too_left  AND direction IS south     THEN action IS turn_right;
-    RULE  3: IF x IS too_left  AND direction IS southwest THEN action IS turn_left;
-    RULE  4: IF x IS too_left  AND direction IS west      THEN action IS turn_left;
-    RULE  5: IF x IS too_left  AND direction IS east      THEN action IS turn_right;
+    RULE  3: IF x IS too_left  AND direction IS southwest THEN action IS turn_right;
+    RULE  4: IF x IS too_left  AND direction IS west      THEN action IS turn_right;
+    RULE  5: IF x IS too_left  AND direction IS east      THEN action IS turn_left;
 
     RULE 10: IF x IS centered  AND direction IS south    THEN action IS turn_none;
 

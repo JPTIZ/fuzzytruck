@@ -85,6 +85,11 @@ int main(int argc, char* argv[]) {
         truck.calc();
         truck.print();
 
-        auto action = truck.action;
+        auto action =
+            truck.action < 10 ? -1 :
+            truck.action < 20 ? 0 :
+            1;
+
+        socket.send(std::to_string(action) + "\n");
     }
 }
