@@ -28,6 +28,8 @@ public:
     void send(const std::string&);
     void close();
 
+    std::string listen();
+
 private:
     int _socket;
 };

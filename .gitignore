@@ -2,7 +2,8 @@ enunciado/
 
 fixedtip.cpp
 tip.cpp
-supersender
+fuzzytruck-client
 
 *.class
 **/*.o
+**/*.a

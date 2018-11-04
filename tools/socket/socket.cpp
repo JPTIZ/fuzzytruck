@@ -10,6 +10,8 @@ using namespace std::string_literals;
 
 namespace {
 
+constexpr auto BUFF_LEN = 128;
+
 void fail(const std::string& host, std::uint16_t port, int code) {
     auto err_msg = "Unknown error "s + std::to_string(code);
 
@@ -72,6 +74,12 @@ void Socket::open(const std::string& host, std::uint16_t port) {
 
 void Socket::send(const std::string& msg) {
     ::send(_socket, msg.c_str(), msg.size(), 0);
+}
+
+std::string Socket::listen() {
+    char buff[BUFF_LEN];
+    recv(_socket, buff, BUFF_LEN, 0);
+    return std::string(buff);
 }
 
 

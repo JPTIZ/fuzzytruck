@@ -1,13 +1,13 @@
 FUNCTION_BLOCK truck
 
 VAR_INPUT
-    x : REAL;
-    y : REAL;
-    angle : REAL;
+    x: REAL;
+    y: REAL;
+    angle: REAL;
 END_VAR
 
 VAR_OUTPUT
-    action : INTEGER;
+    action: INTEGER;
 END_VAR
 
 FUZZIFY x
@@ -29,22 +29,24 @@ FUZZIFY angle
 END_FUZZIFY
 
 DEFUZZIFY action
-    TERM turn_left := (0, 0) (5, 1) (10, 0);
-    TERM turn_none := (10, 0) (15, 1) (20, 0);
+    TERM turn_left  :=  (0, 0)  (5, 1) (10, 0);
+    TERM turn_none  := (10, 0) (15, 1) (20, 0);
     TERM turn_right := (20, 0) (25, 1) (30, 0);
 
-    METHOD : COG;
+    METHOD: COG;
     DEFAULT := 0;
 END_DEFUZZIFY
 
 RULEBLOCK truck_rules
-    AND : MIN;
-    ACT : MIN;
-    ACCU : MAX;
+    AND: MIN;
+    ACT: MIN;
+    ACCU: MAX;
 
-    RULE 1 : IF x IS too_left  AND angle IS left     THEN action IS turn_left;
-    RULE 2 : IF x IS centered  AND angle IS vertical THEN action IS turn_none;
-    RULE 3 : IF x IS too_right AND angle IS right    THEN action IS turn_right;
+    RULE 1: IF x IS too_left  AND y IS really_far AND angle IS left     THEN action IS turn_none;
+
+    RULE 2: IF x IS centered  AND y IS really_far AND angle IS vertical THEN action IS turn_none;
+
+    RULE 3: IF x IS too_right AND y IS really_far AND angle IS right    THEN action IS turn_right;
 END_RULEBLOCK
 
 END_FUNCTION_BLOCK

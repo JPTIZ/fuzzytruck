@@ -30,17 +30,17 @@ void FunctionBlockTruck::calc() {
 }
 
 void FunctionBlockTruck::calc_truck_rules() {
-    auto degree_of_support_1 = 1.0 * (rule_connection_method_and(x_too_left , angle_left));
+    auto degree_of_support_1 = 1.0 * (rule_connection_method_and(rule_connection_method_and(x_too_left , y_really_far) , angle_left));
     if(degree_of_support_1 > 0) {
         for (auto i = 0 ; i < 1000 ; i++) {
             auto x = 0.0 + i * 0.03;
-            auto membership = membership_action_turn_left(x);
+            auto membership = membership_action_turn_none(x);
             auto y = rule_activation_method_min(degree_of_support_1 , membership);
             defuzzify_action[i] += rule_accumulation_method_max(defuzzify_action[i], y);
         }
     }
 
-    auto degree_of_support_2 = 1.0 * (rule_connection_method_and(x_centered , angle_vertical));
+    auto degree_of_support_2 = 1.0 * (rule_connection_method_and(rule_connection_method_and(x_centered , y_really_far) , angle_vertical));
     if(degree_of_support_2 > 0) {
         for (auto i = 0 ; i < 1000 ; i++) {
             auto x = 0.0 + i * 0.03;
@@ -50,7 +50,7 @@ void FunctionBlockTruck::calc_truck_rules() {
         }
     }
 
-    auto degree_of_support_3 = 1.0 * (rule_connection_method_and(x_too_right , angle_right));
+    auto degree_of_support_3 = 1.0 * (rule_connection_method_and(rule_connection_method_and(x_too_right , y_really_far) , angle_right));
     if(degree_of_support_3 > 0) {
         for (auto i = 0 ; i < 1000 ; i++) {
             auto x = 0.0 + i * 0.03;

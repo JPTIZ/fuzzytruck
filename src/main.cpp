@@ -25,21 +25,37 @@ auto parse_args(int argc, char* argv[]) {
     return args;
 }
 
-int main(int argc, char* argv[]) {
-    auto args = parse_args(argc, argv);
-
+auto gimme_socket(const std::string& host, std::uint16_t port) {
     try {
-        auto socket = net::Socket{
-            args["host"s],
-            std::uint16_t(std::stoi(args["port"s]))
-        };
+        return net::Socket{host, port};
     } catch (const net::SocketError& e) {
         std::cerr << "Error connecting to host: " << e.what() << "\n";
+        exit(-1);
     }
+}
+
+auto truck_position(net::Socket& socket) {
+    auto command = "r\r\n"s;
+    socket.send(command);
+
+    auto answer = socket.listen();
+
+    return answer;
+}
+
+int main(int argc, char* argv[]) {
+    auto args = parse_args(argc, argv);
+    auto socket = gimme_socket(
+        args["host"s],
+        std::uint16_t(std::stoi(args["port"s]))
+    );
 
     auto truck = fuzzytruck::FunctionBlockTruck{};
 
-    truck.x = 1;
+    auto position = truck_position(socket);
+    std::cout << "Truck answer:\n    " << position << "\n";
+
+    truck.x = 0;
     truck.y = 0;
     truck.angle = 0;
 

@@ -12,9 +12,6 @@ fuzzytruck:
 
 tools: socket truck
 
-run-server:
-	@$(MAKE) -C $(CONTEST-DIR) run
-
 socket:
 	@$(MAKE) -C tools/socket
 	@mkdir -p lib
@@ -32,3 +29,9 @@ truck:
 	@$(MAKE) -C fuzzytruck
 	@mv fuzzytruck/truck.a lib
 	@echo "Done."
+
+run-client: fuzzytruck
+	@./fuzzytruck-client localhost 4321
+
+run-server:
+	@$(MAKE) -C $(CONTEST-DIR) run
