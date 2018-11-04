@@ -75,9 +75,11 @@ int main(int argc, char* argv[]) {
 
     while (true) {
         auto [x, y, angle] = truck_position(socket);
+
         if (x < 0 or x > 1 or y < 0 or y > 1) {
             break;
         }
+
         truck.x = x;
         truck.y = y;
         truck.direction = angle;
@@ -85,11 +87,8 @@ int main(int argc, char* argv[]) {
         truck.calc();
         truck.print();
 
-        auto action =
-            truck.action < 10 ? -1 :
-            truck.action < 20 ? 0 :
-            1;
-
-        socket.send(std::to_string(action) + "\n");
+        auto action = std::to_string(truck.action);
+        std::cout << "sending " << action << ";\n";
+        socket.send(action + "\n");
     }
 }

@@ -7,39 +7,39 @@ VAR_INPUT
 END_VAR
 
 VAR_OUTPUT
-    action: INTEGER;
+    action: REAL;
 END_VAR
 
 FUZZIFY x
-    TERM too_left := (0, 1) (0.5, 0);
-    TERM centered := (0, 0) (0.5, 1) (1, 0);
+    TERM too_left  := (0.0, 1) (0.5, 0);
+    TERM centered  := (0.4, 0) (0.5, 1) (0.6, 0);
     TERM too_right := (0.5, 0) (1, 1);
 END_FUZZIFY
 
 FUZZIFY y
-    TERM really_far := (0, 1) (0.5, 0);
-    TERM close := (0, 0) (0.5, 1) (1, 0);
+    TERM really_far   := (0, 1) (0.5, 0);
+    TERM close        := (0, 0) (0.5, 1) (1, 0);
     TERM really_close := (0.5, 0) (1, 1);
 END_FUZZIFY
 
 FUZZIFY direction
-    TERM west := (0, 1) (1, 0) (359, 0) (360, 1);
+    TERM west      := (  0.0, 1) ( 20, 0) (340, 0) (360, 1);
 
-    TERM southwest := (0, 0) (1, 1) (89, 1) (90, 0);
-    TERM south     := (89, 0) (90, 1) (91, 0);
-    TERM southeast := (90, 0) (91, 1) (179, 1) (180, 0);
+    TERM southwest := (  0.0, 0) ( 20, 1) ( 70, 1) (90, 0);
+    TERM south     := ( 89.0, 0) ( 90, 1) ( 91, 0);
+    TERM southeast := ( 90.0, 0) (110, 1) (160, 1) (180, 0);
 
-    TERM east := (179, 0) (180, 1) (181, 0);
+    TERM east      := (160.0, 0) (180, 1) (200, 0);
 
-    TERM northeast := (180, 0) (181, 1) (269, 1) (270, 0);
-    TERM north     := (269, 0) (270, 1) (271, 0);
-    TERM northwest := (270, 0) (271, 1) (359, 1) (360, 0);
+    TERM northeast := (180.0, 0) (181, 1) (269, 1) (270, 0);
+    TERM north     := (269.0, 0) (270, 1) (271, 0);
+    TERM northwest := (270.0, 0) (271, 1) (359, 1) (360, 0);
 END_FUZZIFY
 
 DEFUZZIFY action
-    TERM turn_left  :=  (0, 0)  (5, 1) (10, 0);
-    TERM turn_none  := (10, 0) (15, 1) (20, 0);
-    TERM turn_right := (20, 0) (25, 1) (30, 0);
+    TERM turn_right := (-1, 1) (0, 0);
+    TERM turn_none  := (-1, 0) (0, 1) (1, 0);
+    TERM turn_left  :=         (0, 0) (1, 1);
 
     METHOD: COG;
     DEFAULT := 0;
@@ -50,15 +50,30 @@ RULEBLOCK truck_rules
     ACT: MIN;
     ACCU: MAX;
 
-    RULE  1: IF x IS too_left  AND direction IS southeast THEN action IS turn_none;
-    RULE  2: IF x IS too_left  AND direction IS south     THEN action IS turn_right;
-    RULE  3: IF x IS too_left  AND direction IS southwest THEN action IS turn_right;
-    RULE  4: IF x IS too_left  AND direction IS west      THEN action IS turn_right;
-    RULE  5: IF x IS too_left  AND direction IS east      THEN action IS turn_left;
+    RULE  1: IF x IS too_left  AND direction IS southeast AND y IS really_close     THEN action IS turn_right;
+    RULE  2: IF x IS too_left  AND direction IS southeast AND y IS NOT really_close THEN action IS turn_none;
+    RULE  3: IF x IS too_left  AND direction IS south                               THEN action IS turn_left;
+    RULE  4: IF x IS too_left  AND direction IS southwest                           THEN action IS turn_left;
+    RULE  5: IF x IS too_left  AND direction IS west                                THEN action IS turn_left;
+    RULE  6: IF x IS too_left  AND direction IS east                                THEN action IS turn_right;
+    RULE  7: IF x IS too_left  AND direction IS northeast                           THEN action IS turn_right;
+    RULE  8: IF x IS too_left  AND direction IS north                               THEN action IS turn_right;
+    RULE  9: IF x IS too_left  AND direction IS northwest                           THEN action IS turn_right;
 
-    RULE 10: IF x IS centered  AND direction IS south    THEN action IS turn_none;
+    RULE 10: IF x IS centered  AND direction IS south                               THEN action IS turn_none;
+    RULE 11: IF x IS centered  AND direction IS southeast                           THEN action IS turn_right;
+    RULE 12: IF x IS centered  AND direction IS southwest                           THEN action IS turn_left;
 
-    RULE 20: IF x IS too_right AND direction IS west     THEN action IS turn_right;
+    RULE 21: IF x IS too_right AND direction IS southeast                           THEN action IS turn_right;
+    RULE 22: IF x IS too_right AND direction IS south                               THEN action IS turn_right;
+    RULE 23: IF x IS too_right AND direction IS southwest AND y IS really_close     THEN action IS turn_left;
+    RULE 24: IF x IS too_right AND direction IS southwest AND y IS NOT really_close THEN action IS turn_none;
+    // RULE 25: IF x IS too_right AND direction IS southwest                        THEN action IS turn_none;
+    RULE 26: IF x IS too_right AND direction IS west                                THEN action IS turn_right;
+    RULE 27: IF x IS too_right AND direction IS east                                THEN action IS turn_left;
+    RULE 28: IF x IS too_right AND direction IS northeast                           THEN action IS turn_left;
+    RULE 29: IF x IS too_right AND direction IS north                               THEN action IS turn_left;
+    RULE 30: IF x IS too_right AND direction IS northwest                           THEN action IS turn_left;
 END_RULEBLOCK
 
 END_FUNCTION_BLOCK

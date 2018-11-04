@@ -30,52 +30,92 @@ void FunctionBlockTruck::calc() {
 }
 
 void FunctionBlockTruck::calc_truck_rules() {
-    auto degree_of_support_1 = 1.0 * (rule_connection_method_and(x_too_left , direction_southeast));
+    auto degree_of_support_1 = 1.0 * (rule_connection_method_and(rule_connection_method_and(x_too_left , direction_southeast) , y_really_close));
     if(degree_of_support_1 > 0) {
         for (auto i = 0 ; i < 1000 ; i++) {
-            auto x = 0.0 + i * 0.03;
-            auto membership = membership_action_turn_none(x);
+            auto x = -1.0 + i * 0.002;
+            auto membership = membership_action_turn_right(x);
             auto y = rule_activation_method_min(degree_of_support_1 , membership);
             defuzzify_action[i] += rule_accumulation_method_max(defuzzify_action[i], y);
         }
     }
 
-    auto degree_of_support_2 = 1.0 * (rule_connection_method_and(x_too_left , direction_south));
+    auto degree_of_support_2 = 1.0 * (rule_connection_method_and(rule_connection_method_and(x_too_left , direction_southeast) , 1 -y_really_close));
     if(degree_of_support_2 > 0) {
         for (auto i = 0 ; i < 1000 ; i++) {
-            auto x = 0.0 + i * 0.03;
-            auto membership = membership_action_turn_right(x);
+            auto x = -1.0 + i * 0.002;
+            auto membership = membership_action_turn_none(x);
             auto y = rule_activation_method_min(degree_of_support_2 , membership);
             defuzzify_action[i] += rule_accumulation_method_max(defuzzify_action[i], y);
         }
     }
 
-    auto degree_of_support_3 = 1.0 * (rule_connection_method_and(x_too_left , direction_southwest));
+    auto degree_of_support_3 = 1.0 * (rule_connection_method_and(x_too_left , direction_south));
     if(degree_of_support_3 > 0) {
         for (auto i = 0 ; i < 1000 ; i++) {
-            auto x = 0.0 + i * 0.03;
-            auto membership = membership_action_turn_right(x);
+            auto x = -1.0 + i * 0.002;
+            auto membership = membership_action_turn_left(x);
             auto y = rule_activation_method_min(degree_of_support_3 , membership);
             defuzzify_action[i] += rule_accumulation_method_max(defuzzify_action[i], y);
         }
     }
 
-    auto degree_of_support_4 = 1.0 * (rule_connection_method_and(x_too_left , direction_west));
+    auto degree_of_support_4 = 1.0 * (rule_connection_method_and(x_too_left , direction_southwest));
     if(degree_of_support_4 > 0) {
         for (auto i = 0 ; i < 1000 ; i++) {
-            auto x = 0.0 + i * 0.03;
-            auto membership = membership_action_turn_right(x);
+            auto x = -1.0 + i * 0.002;
+            auto membership = membership_action_turn_left(x);
             auto y = rule_activation_method_min(degree_of_support_4 , membership);
             defuzzify_action[i] += rule_accumulation_method_max(defuzzify_action[i], y);
         }
     }
 
-    auto degree_of_support_5 = 1.0 * (rule_connection_method_and(x_too_left , direction_east));
+    auto degree_of_support_5 = 1.0 * (rule_connection_method_and(x_too_left , direction_west));
     if(degree_of_support_5 > 0) {
         for (auto i = 0 ; i < 1000 ; i++) {
-            auto x = 0.0 + i * 0.03;
+            auto x = -1.0 + i * 0.002;
             auto membership = membership_action_turn_left(x);
             auto y = rule_activation_method_min(degree_of_support_5 , membership);
+            defuzzify_action[i] += rule_accumulation_method_max(defuzzify_action[i], y);
+        }
+    }
+
+    auto degree_of_support_6 = 1.0 * (rule_connection_method_and(x_too_left , direction_east));
+    if(degree_of_support_6 > 0) {
+        for (auto i = 0 ; i < 1000 ; i++) {
+            auto x = -1.0 + i * 0.002;
+            auto membership = membership_action_turn_right(x);
+            auto y = rule_activation_method_min(degree_of_support_6 , membership);
+            defuzzify_action[i] += rule_accumulation_method_max(defuzzify_action[i], y);
+        }
+    }
+
+    auto degree_of_support_7 = 1.0 * (rule_connection_method_and(x_too_left , direction_northeast));
+    if(degree_of_support_7 > 0) {
+        for (auto i = 0 ; i < 1000 ; i++) {
+            auto x = -1.0 + i * 0.002;
+            auto membership = membership_action_turn_right(x);
+            auto y = rule_activation_method_min(degree_of_support_7 , membership);
+            defuzzify_action[i] += rule_accumulation_method_max(defuzzify_action[i], y);
+        }
+    }
+
+    auto degree_of_support_8 = 1.0 * (rule_connection_method_and(x_too_left , direction_north));
+    if(degree_of_support_8 > 0) {
+        for (auto i = 0 ; i < 1000 ; i++) {
+            auto x = -1.0 + i * 0.002;
+            auto membership = membership_action_turn_right(x);
+            auto y = rule_activation_method_min(degree_of_support_8 , membership);
+            defuzzify_action[i] += rule_accumulation_method_max(defuzzify_action[i], y);
+        }
+    }
+
+    auto degree_of_support_9 = 1.0 * (rule_connection_method_and(x_too_left , direction_northwest));
+    if(degree_of_support_9 > 0) {
+        for (auto i = 0 ; i < 1000 ; i++) {
+            auto x = -1.0 + i * 0.002;
+            auto membership = membership_action_turn_right(x);
+            auto y = rule_activation_method_min(degree_of_support_9 , membership);
             defuzzify_action[i] += rule_accumulation_method_max(defuzzify_action[i], y);
         }
     }
@@ -83,19 +123,119 @@ void FunctionBlockTruck::calc_truck_rules() {
     auto degree_of_support_10 = 1.0 * (rule_connection_method_and(x_centered , direction_south));
     if(degree_of_support_10 > 0) {
         for (auto i = 0 ; i < 1000 ; i++) {
-            auto x = 0.0 + i * 0.03;
+            auto x = -1.0 + i * 0.002;
             auto membership = membership_action_turn_none(x);
             auto y = rule_activation_method_min(degree_of_support_10 , membership);
             defuzzify_action[i] += rule_accumulation_method_max(defuzzify_action[i], y);
         }
     }
 
-    auto degree_of_support_20 = 1.0 * (rule_connection_method_and(x_too_right , direction_west));
-    if(degree_of_support_20 > 0) {
+    auto degree_of_support_11 = 1.0 * (rule_connection_method_and(x_centered , direction_southeast));
+    if(degree_of_support_11 > 0) {
         for (auto i = 0 ; i < 1000 ; i++) {
-            auto x = 0.0 + i * 0.03;
+            auto x = -1.0 + i * 0.002;
             auto membership = membership_action_turn_right(x);
-            auto y = rule_activation_method_min(degree_of_support_20 , membership);
+            auto y = rule_activation_method_min(degree_of_support_11 , membership);
+            defuzzify_action[i] += rule_accumulation_method_max(defuzzify_action[i], y);
+        }
+    }
+
+    auto degree_of_support_12 = 1.0 * (rule_connection_method_and(x_centered , direction_southwest));
+    if(degree_of_support_12 > 0) {
+        for (auto i = 0 ; i < 1000 ; i++) {
+            auto x = -1.0 + i * 0.002;
+            auto membership = membership_action_turn_left(x);
+            auto y = rule_activation_method_min(degree_of_support_12 , membership);
+            defuzzify_action[i] += rule_accumulation_method_max(defuzzify_action[i], y);
+        }
+    }
+
+    auto degree_of_support_21 = 1.0 * (rule_connection_method_and(x_too_right , direction_southeast));
+    if(degree_of_support_21 > 0) {
+        for (auto i = 0 ; i < 1000 ; i++) {
+            auto x = -1.0 + i * 0.002;
+            auto membership = membership_action_turn_right(x);
+            auto y = rule_activation_method_min(degree_of_support_21 , membership);
+            defuzzify_action[i] += rule_accumulation_method_max(defuzzify_action[i], y);
+        }
+    }
+
+    auto degree_of_support_22 = 1.0 * (rule_connection_method_and(x_too_right , direction_south));
+    if(degree_of_support_22 > 0) {
+        for (auto i = 0 ; i < 1000 ; i++) {
+            auto x = -1.0 + i * 0.002;
+            auto membership = membership_action_turn_right(x);
+            auto y = rule_activation_method_min(degree_of_support_22 , membership);
+            defuzzify_action[i] += rule_accumulation_method_max(defuzzify_action[i], y);
+        }
+    }
+
+    auto degree_of_support_23 = 1.0 * (rule_connection_method_and(rule_connection_method_and(x_too_right , direction_southwest) , y_really_close));
+    if(degree_of_support_23 > 0) {
+        for (auto i = 0 ; i < 1000 ; i++) {
+            auto x = -1.0 + i * 0.002;
+            auto membership = membership_action_turn_left(x);
+            auto y = rule_activation_method_min(degree_of_support_23 , membership);
+            defuzzify_action[i] += rule_accumulation_method_max(defuzzify_action[i], y);
+        }
+    }
+
+    auto degree_of_support_24 = 1.0 * (rule_connection_method_and(rule_connection_method_and(x_too_right , direction_southwest) , 1 -y_really_close));
+    if(degree_of_support_24 > 0) {
+        for (auto i = 0 ; i < 1000 ; i++) {
+            auto x = -1.0 + i * 0.002;
+            auto membership = membership_action_turn_none(x);
+            auto y = rule_activation_method_min(degree_of_support_24 , membership);
+            defuzzify_action[i] += rule_accumulation_method_max(defuzzify_action[i], y);
+        }
+    }
+
+    auto degree_of_support_26 = 1.0 * (rule_connection_method_and(x_too_right , direction_west));
+    if(degree_of_support_26 > 0) {
+        for (auto i = 0 ; i < 1000 ; i++) {
+            auto x = -1.0 + i * 0.002;
+            auto membership = membership_action_turn_right(x);
+            auto y = rule_activation_method_min(degree_of_support_26 , membership);
+            defuzzify_action[i] += rule_accumulation_method_max(defuzzify_action[i], y);
+        }
+    }
+
+    auto degree_of_support_27 = 1.0 * (rule_connection_method_and(x_too_right , direction_east));
+    if(degree_of_support_27 > 0) {
+        for (auto i = 0 ; i < 1000 ; i++) {
+            auto x = -1.0 + i * 0.002;
+            auto membership = membership_action_turn_left(x);
+            auto y = rule_activation_method_min(degree_of_support_27 , membership);
+            defuzzify_action[i] += rule_accumulation_method_max(defuzzify_action[i], y);
+        }
+    }
+
+    auto degree_of_support_28 = 1.0 * (rule_connection_method_and(x_too_right , direction_northeast));
+    if(degree_of_support_28 > 0) {
+        for (auto i = 0 ; i < 1000 ; i++) {
+            auto x = -1.0 + i * 0.002;
+            auto membership = membership_action_turn_left(x);
+            auto y = rule_activation_method_min(degree_of_support_28 , membership);
+            defuzzify_action[i] += rule_accumulation_method_max(defuzzify_action[i], y);
+        }
+    }
+
+    auto degree_of_support_29 = 1.0 * (rule_connection_method_and(x_too_right , direction_north));
+    if(degree_of_support_29 > 0) {
+        for (auto i = 0 ; i < 1000 ; i++) {
+            auto x = -1.0 + i * 0.002;
+            auto membership = membership_action_turn_left(x);
+            auto y = rule_activation_method_min(degree_of_support_29 , membership);
+            defuzzify_action[i] += rule_accumulation_method_max(defuzzify_action[i], y);
+        }
+    }
+
+    auto degree_of_support_30 = 1.0 * (rule_connection_method_and(x_too_right , direction_northwest));
+    if(degree_of_support_30 > 0) {
+        for (auto i = 0 ; i < 1000 ; i++) {
+            auto x = -1.0 + i * 0.002;
+            auto membership = membership_action_turn_left(x);
+            auto y = rule_activation_method_min(degree_of_support_30 , membership);
             defuzzify_action[i] += rule_accumulation_method_max(defuzzify_action[i], y);
         }
     }
@@ -106,7 +246,7 @@ void FunctionBlockTruck::defuzzify() {
     auto sum_action = 0.0;
     auto wsum_action = 0.0;
     for (auto i = 0; i < 1000 ; i++) {
-        auto x = 0.0 + i * 0.03;
+        auto x = -1.0 + i * 0.002;
         sum_action += defuzzify_action[i];
         wsum_action += x * defuzzify_action[i];
     }
@@ -132,30 +272,28 @@ void FunctionBlockTruck::fuzzify() {
 
 double FunctionBlockTruck::membership_action_turn_left(double x) {
     if (x <= 0.0)    return 0.0;
-    if (x > 10.0)    return 0.0;
-    if (x <= 5.0)    return 0.0 + (1.0 - 0.0) * ((x - 0.0) / (5.0 - 0.0));
-    if (x <= 10.0)    return 1.0 + (0.0 - 1.0) * ((x - 5.0) / (10.0 - 5.0));
+    if (x > 1.0)    return 1.0;
+    if (x <= 1.0)    return 0.0 + (1.0 - 0.0) * ((x - 0.0) / (1.0 - 0.0));
 }
 
 double FunctionBlockTruck::membership_action_turn_none(double x) {
-    if (x <= 10.0)    return 0.0;
-    if (x > 20.0)    return 0.0;
-    if (x <= 15.0)    return 0.0 + (1.0 - 0.0) * ((x - 10.0) / (15.0 - 10.0));
-    if (x <= 20.0)    return 1.0 + (0.0 - 1.0) * ((x - 15.0) / (20.0 - 15.0));
+    if (x <= -1.0)    return 0.0;
+    if (x > 1.0)    return 0.0;
+    if (x <= 0.0)    return 0.0 + (1.0 - 0.0) * ((x - -1.0) / (0.0 - -1.0));
+    if (x <= 1.0)    return 1.0 + (0.0 - 1.0) * ((x - 0.0) / (1.0 - 0.0));
 }
 
 double FunctionBlockTruck::membership_action_turn_right(double x) {
-    if (x <= 20.0)    return 0.0;
-    if (x > 30.0)    return 0.0;
-    if (x <= 25.0)    return 0.0 + (1.0 - 0.0) * ((x - 20.0) / (25.0 - 20.0));
-    if (x <= 30.0)    return 1.0 + (0.0 - 1.0) * ((x - 25.0) / (30.0 - 25.0));
+    if (x <= -1.0)    return 1.0;
+    if (x > 0.0)    return 0.0;
+    if (x <= 0.0)    return 1.0 + (0.0 - 1.0) * ((x - -1.0) / (0.0 - -1.0));
 }
 
 double FunctionBlockTruck::membership_direction_east(double x) {
-    if (x <= 179.0)    return 0.0;
-    if (x > 181.0)    return 0.0;
-    if (x <= 180.0)    return 0.0 + (1.0 - 0.0) * ((x - 179.0) / (180.0 - 179.0));
-    if (x <= 181.0)    return 1.0 + (0.0 - 1.0) * ((x - 180.0) / (181.0 - 180.0));
+    if (x <= 160.0)    return 0.0;
+    if (x > 200.0)    return 0.0;
+    if (x <= 180.0)    return 0.0 + (1.0 - 0.0) * ((x - 160.0) / (180.0 - 160.0));
+    if (x <= 200.0)    return 1.0 + (0.0 - 1.0) * ((x - 180.0) / (200.0 - 180.0));
 }
 
 double FunctionBlockTruck::membership_direction_north(double x) {
@@ -191,32 +329,32 @@ double FunctionBlockTruck::membership_direction_south(double x) {
 double FunctionBlockTruck::membership_direction_southeast(double x) {
     if (x <= 90.0)    return 0.0;
     if (x > 180.0)    return 0.0;
-    if (x <= 91.0)    return 0.0 + (1.0 - 0.0) * ((x - 90.0) / (91.0 - 90.0));
-    if (x <= 179.0)    return 1.0 + (1.0 - 1.0) * ((x - 91.0) / (179.0 - 91.0));
-    if (x <= 180.0)    return 1.0 + (0.0 - 1.0) * ((x - 179.0) / (180.0 - 179.0));
+    if (x <= 110.0)    return 0.0 + (1.0 - 0.0) * ((x - 90.0) / (110.0 - 90.0));
+    if (x <= 160.0)    return 1.0 + (1.0 - 1.0) * ((x - 110.0) / (160.0 - 110.0));
+    if (x <= 180.0)    return 1.0 + (0.0 - 1.0) * ((x - 160.0) / (180.0 - 160.0));
 }
 
 double FunctionBlockTruck::membership_direction_southwest(double x) {
     if (x <= 0.0)    return 0.0;
     if (x > 90.0)    return 0.0;
-    if (x <= 1.0)    return 0.0 + (1.0 - 0.0) * ((x - 0.0) / (1.0 - 0.0));
-    if (x <= 89.0)    return 1.0 + (1.0 - 1.0) * ((x - 1.0) / (89.0 - 1.0));
-    if (x <= 90.0)    return 1.0 + (0.0 - 1.0) * ((x - 89.0) / (90.0 - 89.0));
+    if (x <= 20.0)    return 0.0 + (1.0 - 0.0) * ((x - 0.0) / (20.0 - 0.0));
+    if (x <= 70.0)    return 1.0 + (1.0 - 1.0) * ((x - 20.0) / (70.0 - 20.0));
+    if (x <= 90.0)    return 1.0 + (0.0 - 1.0) * ((x - 70.0) / (90.0 - 70.0));
 }
 
 double FunctionBlockTruck::membership_direction_west(double x) {
     if (x <= 0.0)    return 1.0;
     if (x > 360.0)    return 1.0;
-    if (x <= 1.0)    return 1.0 + (0.0 - 1.0) * ((x - 0.0) / (1.0 - 0.0));
-    if (x <= 359.0)    return 0.0 + (0.0 - 0.0) * ((x - 1.0) / (359.0 - 1.0));
-    if (x <= 360.0)    return 0.0 + (1.0 - 0.0) * ((x - 359.0) / (360.0 - 359.0));
+    if (x <= 20.0)    return 1.0 + (0.0 - 1.0) * ((x - 0.0) / (20.0 - 0.0));
+    if (x <= 340.0)    return 0.0 + (0.0 - 0.0) * ((x - 20.0) / (340.0 - 20.0));
+    if (x <= 360.0)    return 0.0 + (1.0 - 0.0) * ((x - 340.0) / (360.0 - 340.0));
 }
 
 double FunctionBlockTruck::membership_x_centered(double x) {
-    if (x <= 0.0)    return 0.0;
-    if (x > 1.0)    return 0.0;
-    if (x <= 0.5)    return 0.0 + (1.0 - 0.0) * ((x - 0.0) / (0.5 - 0.0));
-    if (x <= 1.0)    return 1.0 + (0.0 - 1.0) * ((x - 0.5) / (1.0 - 0.5));
+    if (x <= 0.4)    return 0.0;
+    if (x > 0.6)    return 0.0;
+    if (x <= 0.5)    return 0.0 + (1.0 - 0.0) * ((x - 0.4) / (0.5 - 0.4));
+    if (x <= 0.6)    return 1.0 + (0.0 - 1.0) * ((x - 0.5) / (0.6 - 0.5));
 }
 
 double FunctionBlockTruck::membership_x_too_left(double x) {
