@@ -1,4 +1,6 @@
 #include <iostream>
+#include <sstream>
+#include <string>
 #include <map>
 
 #include "../fuzzytruck/truck.h"
@@ -34,13 +36,32 @@ auto gimme_socket(const std::string& host, std::uint16_t port) {
     }
 }
 
+auto parse_double(const std::string& s) {
+    auto i = std::istringstream{s};
+    double d;
+    i >> d;
+    return d;
+}
+
+auto parse_position(const std::string& s) {
+    auto x_end = s.find('\t');
+    auto x = parse_double(s.substr(0, x_end));
+
+    auto y_end = s.find('\t', x_end+1);
+    auto y = parse_double(s.substr(x_end+1, y_end));
+
+    auto angle = parse_double(s.substr(y_end+1));
+
+    return std::tuple{x, y, angle};
+}
+
 auto truck_position(net::Socket& socket) {
     auto command = "r\r\n"s;
     socket.send(command);
 
     auto answer = socket.listen();
 
-    return answer;
+    return parse_position(answer);
 }
 
 int main(int argc, char* argv[]) {
@@ -52,13 +73,18 @@ int main(int argc, char* argv[]) {
 
     auto truck = fuzzytruck::FunctionBlockTruck{};
 
-    auto position = truck_position(socket);
-    std::cout << "Truck answer:\n    " << position << "\n";
+    while (true) {
+        auto [x, y, angle] = truck_position(socket);
+        if (x < 0 or x > 1 or y < 0 or y > 1) {
+            break;
+        }
+        truck.x = x;
+        truck.y = y;
+        truck.direction = angle;
 
-    truck.x = 0;
-    truck.y = 0;
-    truck.direction = 0;
+        truck.calc();
+        truck.print();
 
-    truck.calc();
-    truck.print();
+        auto action = truck.action;
+    }
 }
