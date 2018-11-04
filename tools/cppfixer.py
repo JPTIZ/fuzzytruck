@@ -65,9 +65,7 @@ def extract_classes(contents: str, output: str = ''):
 
         if line.startswith('class'):
             start = i
-            print(f'found {line}')
         elif line == '};' and start is not None:
-            print(f'closing {lines[start]}')
             classes.append('\n'.join(lines[start:i + 1]))
             lines = lines[:start] + lines[i + 1:]
             i, start = start, None
@@ -90,7 +88,7 @@ def organize_includes(contents: str, output: str):
 
         i += 1
 
-    includes = '\n'.join(includes + [f'#include "{output}.h"'])
+    includes = '\n'.join(includes + [f'#include "{output.split("/")[-1]}.h"'])
 
     for i, line in enumerate(lines):
         if line.strip():
@@ -180,7 +178,12 @@ if __name__ == '__main__':
 
     with open(f'{output}.h', 'w') as f:
         welp = '\n'.join(classes)
-        tag = f'{filename}_{output}_H'.upper().replace('.', '_')
+        tag = (
+            f'{filename}_{output}_H'
+            .upper()
+            .replace('.', '_')
+            .replace('/', '_')
+        )
         f.write(
             f'#ifndef {tag}\n'
             f'#define {tag}\n'

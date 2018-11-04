@@ -11,9 +11,6 @@ using namespace std::string_literals;
 namespace {
 
 void fail(const std::string& host, std::uint16_t port, int code) {
-    auto base_msg =
-        "Error in " + host + ":" + std::to_string(port) + ": ";
-
     auto err_msg = "Unknown error "s + std::to_string(code);
 
     switch (code) {
@@ -33,7 +30,7 @@ void fail(const std::string& host, std::uint16_t port, int code) {
         err_msg = "File Descriptor is not a socket.";
     };
 
-    throw net::SocketError(base_msg + err_msg);
+    throw net::SocketError(err_msg);
 }
 
 }
