@@ -1,8 +1,8 @@
-CONTEST := contest
-
-.PHONY: socket tools fuzzytruck
+CONTEST-DIR := contest
 
 MAKE := make --no-print-directory
+
+.PHONY: socket tools fuzzytruck
 
 default: tools fuzzytruck
 	@echo ":3"
@@ -13,7 +13,7 @@ fuzzytruck:
 tools: socket truck
 
 run-server:
-	java -cp ${CONTEST}/bin:${CONTEST}/lib/forms.jar Server
+	@$(MAKE) -C $(CONTEST-DIR) run
 
 socket:
 	@$(MAKE) -C tools/socket
