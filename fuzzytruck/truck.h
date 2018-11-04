@@ -6,16 +6,21 @@ namespace fuzzytruck {
 class FunctionBlockTruck {
 
     public: 
-    double angle;
+    double direction;
     double x;
     double y;
 
     double action;
 
     private: 
-    double angle_left;
-    double angle_right;
-    double angle_vertical;
+    double direction_east;
+    double direction_north;
+    double direction_northeast;
+    double direction_northwest;
+    double direction_south;
+    double direction_southeast;
+    double direction_southwest;
+    double direction_west;
 
     double x_centered;
     double x_too_left;
@@ -41,9 +46,14 @@ class FunctionBlockTruck {
     double membership_action_turn_left(double x);
     double membership_action_turn_none(double x);
     double membership_action_turn_right(double x);
-    double membership_angle_left(double x);
-    double membership_angle_right(double x);
-    double membership_angle_vertical(double x);
+    double membership_direction_east(double x);
+    double membership_direction_north(double x);
+    double membership_direction_northeast(double x);
+    double membership_direction_northwest(double x);
+    double membership_direction_south(double x);
+    double membership_direction_southeast(double x);
+    double membership_direction_southwest(double x);
+    double membership_direction_west(double x);
     double membership_x_centered(double x);
     double membership_x_too_left(double x);
     double membership_x_too_right(double x);

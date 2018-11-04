@@ -57,7 +57,7 @@ int main(int argc, char* argv[]) {
 
     truck.x = 0;
     truck.y = 0;
-    truck.angle = 0;
+    truck.direction = 0;
 
     truck.calc();
     truck.print();
