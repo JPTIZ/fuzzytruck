@@ -1,0 +1,95 @@
+%-------------------------------------------------------------------------------
+\documentclass{article}
+
+%-------------------------------------------------------------------------------
+% Packages
+\usepackage[portuguese]{babel}
+\usepackage{environ}
+\usepackage{hyperref}
+\usepackage{minted}
+\usepackage{xcolor}
+
+%-------------------------------------------------------------------------------
+% User-commands
+\newcommand{\todo}[1]{{\color{red}{#1}}}
+
+\NewEnviron{superframe}{%
+    \begin{center}
+        \fbox{\setlength{\fboxsep}{1em}\fbox{\parbox{5.5in}{%
+            \BODY{}
+        }}}
+    \end{center}
+}
+
+\newmintedfile[textfile]{text}{autogobble, breaklines}
+
+%-------------------------------------------------------------------------------
+% Project configs
+\title{Relatório de I.A.: Sistemas Fuzzy (Trabalho 4)}
+\author{Cauê Baasch de Souza \\
+        João Paulo Taylor Ienczak Zanette}
+\date{\today}
+
+%-------------------------------------------------------------------------------
+\begin{document}
+    \maketitle{}
+
+    \todo{%
+        TO-DO\@:
+        \begin{itemize}
+            \item Descrever tutorial breve de Fuzzy;
+            \item Entradas;
+            \item Conjuntos Fuzzy;
+            \item Regras;
+            \item Método de defuzzificação;
+            \item Dificuldades encontradas e como foram superadas.
+        \end{itemize}
+    }
+
+    \section{Introdução: Sistemas Fuzzy e o ``Fuzzy Truck''}
+
+    Em um curso de Computação, é comum que se aprenda inicialmente a resolver
+    problemas utilizando Lógica Proposicional, em que se julgam diferentes
+    assertivas como ``verdadeiras'' ou ``falsas''. Tomando um exemplo simplista
+    de previsão do tempo, pode-se partir das preposições:
+
+    \begin{itemize}
+        \item $h$: fez calor (\textit{``hot''});
+        \item $c$: está nublado (\textit{``cloudy''});
+        \item $r$: irá chover (\textit{``rain''}).
+    \end{itemize}
+
+    A partir delas, é possível estabelecer a relação ``se fez calor e está
+    nublado, então irá chover'', ou seja:
+
+    \begin{equation}
+        h \land c \rightarrow r
+    \end{equation}
+
+    Porém, é de se concordar que fazer calor e estar nublado não são tão
+    simples de se definir apenas com ``verdadeiro'' e ``falso'', mas sim como
+    ``o quão quente'' e ``o quão nublado''. Esse é o ponto que Lógica Fuzzy
+    ataca: a possibilidade de atribuir graus de verdade às assertivas dadas.
+    Assim, é possível mapear que, dada a temperatura ao longo do dia (pode-se
+    considerar, por exemplo, o ponto mais alto da temperatura), ela esteja mais
+    próxima de fria quanto mais próxima de 0ºC, ou de quente quanto mais
+    próxima de 40ºC, ou amena quanto mais próxima de 20ºC.
+
+
+
+    \section{Resolvendo o problema do ``Fuzzy Truck''}
+
+    \subsection{Entradas utilizadas}
+
+    \subsection{Conjuntos Fuzzy}
+
+    \subsection{Regras utilizadas}
+
+    \subsection{Defuzzificação}
+
+    \section{Conclusões e considerações}
+
+    \bibliographystyle{unsrt}
+    \bibliography{refs}
+    \nocite{*}
+\end{document}

@@ -35,3 +35,7 @@ run-client: tools fuzzytruck
 
 run-server:
 	@$(MAKE) -C $(CONTEST-DIR) run
+
+show-chart:
+	javac -cp tools/jFuzzyLogic.jar tools/Charter.java
+	java -cp tools:tools/jFuzzyLogic.jar Charter ${FILE} ${FUNCTIONBLOCK}
