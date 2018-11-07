@@ -76,13 +76,13 @@ int main(int argc, char* argv[]) {
     while (true) {
         auto [x, y, angle] = truck_position(socket);
 
-        if (x < 0 or x > 1 or y < 0 or y > 1) {
+        if ((x >= 0.45 or x <= 0.55) and y > 1) {
             break;
         }
 
         truck.x = x;
         truck.y = y;
-        truck.direction = angle;
+        truck.dir = angle;
 
         truck.calc();
         truck.print();

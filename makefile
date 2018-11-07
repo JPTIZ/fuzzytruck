@@ -19,19 +19,20 @@ socket:
 
 truck:
 	@echo "Euro-truck super composer...START!"
+	python fucker.py
 	@echo "Generating C++ file..."
-	@java -jar tools/jFuzzyLogic.jar -c truck.fcl > truck.cpp
+	java -jar tools/jFuzzyLogic.jar -c truck.fcl > truck.cpp
 	@echo "Applying style and separating into .h..."
-	@python tools/cppfixer.py truck.cpp fuzzytruck/truck
+	python tools/cppfixer.py truck.cpp fuzzytruck/truck
 	@echo "Removing temporary files..."
-	@rm truck.cpp
+	rm truck.cpp
 	@echo "Compiling to library..."
 	@$(MAKE) -C fuzzytruck
-	@mv fuzzytruck/truck.a lib
+	mv fuzzytruck/truck.a lib
 	@echo "Done."
 
 run-client: tools fuzzytruck
-	@./fuzzytruck-client localhost 4321
+	@./fuzzytruck-client localhost ${PORT}
 
 run-server:
 	@$(MAKE) -C $(CONTEST-DIR) run

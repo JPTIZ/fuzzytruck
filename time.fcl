@@ -10,20 +10,20 @@ var_output
 end_var
 
 fuzzify temperature
-    term cold := ( 0, 1) (15, 0);
-    term warm := (10, 0) (20, 1) (30, 0);
-    term hot  :=         (20, 0) (30, 1);
+    term cold := ( 0, 1) (13, 1) (17, 0);
+    term warm := (14, 0) (18, 1) (21, 1) (26, 0);
+    term hot  := (23, 0) (25, 1);
 end_fuzzify
 
 fuzzify cloud_density
     term no_clouds := (0.0 , 1) (0.25, 0);
-    term sparse    := (0.15, 0) (0.30, 1) (0.60, 0);
-    term cloudy    :=           (0.55, 0) (1.00, 1);
+    term sparse    := (0.15, 0) (0.30, 1) (0.50, 1) (0.60, 0);
+    term cloudy    :=           (0.55, 0) (0.60, 1) (1.00, 1);
 end_fuzzify
 
 defuzzify will_rain
-    term no       := (0.0 , 1.0) (0.55, 0.0);
-    term a_little := (0.45, 0.0) (0.60, 1.0) (0.75, 0.0);
+    term no       := ( 0.0, 1.0) (0.55, 0.0);
+    term a_little := ( 0.0, 0.0) (0.40, 1.0) (0.70, 1.0) (0.75, 0.0);
     term a_lot    := (0.65, 0.0) (0.70, 0.9) (1.00, 1.0);
 
     method: cog;
