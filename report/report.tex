@@ -36,16 +36,6 @@
 \begin{document}
     \maketitle{}
 
-    \todo{%
-        TO-DO\@:
-        \begin{itemize}
-            \item Conjuntos Fuzzy;
-            \item Regras;
-            \item Método de defuzzificação;
-            \item Dificuldades encontradas e como foram superadas.
-        \end{itemize}
-    }
-
     \section{O ``Fuzzy Truck''}
 
     No problema ``Fuzzy Truck'', é necessário definir parâmetros, saídas e
@@ -81,9 +71,35 @@
         \item A direção do caminhão, separada em: norte, sul, leste e oeste.
     \end{itemize}
 
-    \subsection{Regras utilizadas}
+    \subsection{Regras utilizadas e Defuzzificação}
 
-    \subsection{Defuzzificação}
+    Por simplicidade, as regras definidas foram:
+
+    \begin{itemize}
+        \item Muito para a esquerda $\land$ Norte $\rightarrow$ Virar para a
+            direita
+        \item Muito para a esquerda $\land$ Muito longe $\land$ Leste
+            $\rightarrow$ virar para a direita
+        \item Muito para a esquerda $\land$ Muito longe $\land$ Sul
+            $\rightarrow$ virar para a esquerda
+        \item Centralizado $\land$ Oeste $\rightarrow$ Virar para a esquerda
+        \item Centralizado $\land$ Norte $\rightarrow$ Virar para a esquerda
+        \item Centralizado $\land$ Leste $\rightarrow$ Virar para a direita
+        \item Muito para a direita $\land$ Norte $\rightarrow$ Virar para a
+            esquerda
+        \item Muito para a direita $\land$ Muito longe $\land$ Oeste
+            $\rightarrow$ virar para a esquerda
+        \item Muito para a direita $\land$ Muito longe $\land$ Sul
+            $\rightarrow$ virar para a direita
+    \end{itemize}
+
+    A ação é defuzzificada dos conjuntos ``virar para a direita'' ou ``virar
+    para a esquerda'' para um valor no intervalo $[-1, 1]$. Um conjunto para a
+    ação de ``não virar'' foi experimentado, mas ele se mostrou desnecessário e
+    ineficiente, porque uma decisão que deveria ter um alto grau de pertinência
+    para ``não virar'' já terá, de acordo com as regras, um baixo grau de
+    pertencimento aos conjuntos respectivos às outras ações. Consequentemente,
+    tal decisão já terá um valor próximo do zero esperado.
 
     \section{Conclusões e considerações}
 
