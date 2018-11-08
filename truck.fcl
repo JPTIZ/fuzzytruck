@@ -50,15 +50,15 @@ ruleblock truck_rules
 
 
 
-    rule 1: if  x is left  and  dir is north  then action is left 
-    rule 2: if  x is right  and  dir is north  then action is right 
-    rule 3: if  x is center  and  dir is east  then action is left 
-    rule 4: if  x is center  and  dir is west  then action is right 
-    rule 5: if  x is center  and  dir is north  then action is right 
-    rule 6: if  x is left  and  y is far  and  dir is south  then action is right 
-    rule 7: if  x is left  and  y is far  and  dir is east  then action is left 
-    rule 8: if  x is right  and  y is far  and  dir is south  then action is left 
-    rule 9: if  x is right  and  y is far  and  dir is west  then action is right 
+    rule 1: if  x is left  and  dir is north  then action is left; 
+    rule 2: if  x is right  and  dir is north  then action is right; 
+    rule 3: if  x is center  and  dir is east  then action is left; 
+    rule 4: if  x is center  and  dir is west  then action is right; 
+    rule 5: if  x is center  and  dir is north  then action is right; 
+    rule 6: if  x is left  and  y is far  and  dir is south  then action is right; 
+    rule 7: if  x is left  and  y is far  and  dir is east  then action is left; 
+    rule 8: if  x is right  and  y is far  and  dir is south  then action is left; 
+    rule 9: if  x is right  and  y is far  and  dir is west  then action is right; 
 end_ruleblock
 
 end_function_block

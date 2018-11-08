@@ -1,3 +1,5 @@
+from typing import NamedTuple
+
 STUB = '''
 function_block truck
 
@@ -59,9 +61,6 @@ end_function_block
 '''
 
 
-from typing import NamedTuple
-
-
 class Rule(NamedTuple):
     x: str = None
     y: str = None
@@ -101,7 +100,7 @@ if __name__ == '__main__':
             if cond:
                 cond += ' and '
             cond += f' dir is {dir} '
-        contents += f'\n    rule {i+1}: if {cond} then action is {action} '
+        contents += f'\n    rule {i+1}: if {cond} then action is {action}; '
     contents += THE_END
     with open('truck.fcl', 'w') as f:
         f.write(contents)

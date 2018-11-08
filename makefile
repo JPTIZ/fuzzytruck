@@ -2,9 +2,9 @@ CONTEST-DIR := contest
 
 MAKE := make --no-print-directory
 
-.PHONY: socket tools fuzzytruck
+.PHONY: socket tools fuzzytruck report
 
-default: tools fuzzytruck
+default: tools fuzzytruck report
 	@echo ":3"
 
 fuzzytruck:
@@ -40,3 +40,6 @@ run-server:
 show-chart:
 	javac -cp tools/jFuzzyLogic.jar tools/Charter.java
 	java -cp tools:tools/jFuzzyLogic.jar Charter ${FILE} ${FUNCTIONBLOCK}
+
+report:
+	@$(MAKE) -C report
