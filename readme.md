@@ -50,4 +50,6 @@ As ferramentas que precisam ser compiladas são:
 - [Charter](tools/Charter.java): Um pequeno bytecode Java que mostra gráficos
   dos intervalos dos conjuntos Fuzzy;
 - [Cliente Socket](/src): O cliente socket específico para o Fuzzy Truck,
-  escrito em C++ utilizando o `lib/truck.a` e `lib/socket.a`.
+  escrito em C++ utilizando o `lib/truck.a` e `lib/socket.a`;
+- [Fuzzy Truck Contest](/contest): O simulador e servidor socket escrito em
+  Java.
