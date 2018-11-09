@@ -4,26 +4,13 @@
 %-------------------------------------------------------------------------------
 % Packages
 \usepackage[portuguese]{babel}
+\usepackage{booktabs}
 \usepackage{environ}
 \usepackage[margin=2cm]{geometry}
 \usepackage{graphicx}
 \usepackage{hyperref}
 \usepackage{minted}
 \usepackage{xcolor}
-
-%-------------------------------------------------------------------------------
-% User-commands
-\newcommand{\todo}[1]{{\color{red}{#1}}}
-
-\NewEnviron{superframe}{%
-    \begin{center}
-        \fbox{\setlength{\fboxsep}{1em}\fbox{\parbox{5.5in}{%
-            \BODY{}
-        }}}
-    \end{center}
-}
-
-\newmintedfile[textfile]{text}{autogobble, breaklines}
 
 %-------------------------------------------------------------------------------
 % Project configs
@@ -54,13 +41,59 @@
     caminhão e a distância até a doca, que está centralizada no ponto $(0.5,
     1)$.
 
+    Para simulação, é utilizado um programa gráfico simples
+    (Figura~\ref{simulator}), escrito em Java, que simula o sistema em duas
+    instâncias. O objetivo é que cada instância represente um competidor, que
+    irá rodar seu sistema de inferência Fuzzy e enviar comandos ao programa. A
+    comunicação é feita via Sockets em um host e portas pré-definidos
+    (\texttt{localhost} para o Host, e 4321 e 4322 para as portas de cada
+    jogador). Todo o código da solução realizada neste trabalho está disponível
+    em~\cite{oficial-repo}.
+
+    \begin{figure}[ht]
+        \includegraphics[keepaspectratio,width=.5\textwidth]{img/fuzzytruck-initial}
+        \caption{Tela inicial do simulador para o Fuzzy Truck.\label{simulator}}
+    \end{figure}
+
     \section{Resolvendo o problema do ``Fuzzy Truck''}
 
     \subsection{Entradas utilizadas e Conjuntos Fuzzy}
 
-    Foram utilizadas três entradas simples: as coordenadas $X$ e $Y$ e o ângulo
-    do caminhão (em graus). Os conjuntos fuzzy (visualizáveis na
-    Figura~\ref{fuzzy-sets}) foram definidos pensando em:
+    Foram utilizadas três entradas simples, descritas na
+    Tabela~\ref{system-entries}, em que X e Y simbolizam as coordenadas do
+    caminhão.
+
+    \begin{table}[ht]
+        \centering{}
+        \begin{tabular}{c c c c}
+            \toprule
+            Entrada & Símbolo & Tipo & Intervalo esperado \\
+            \midrule
+            X      & \texttt{x}   & Real & $[0, 1]$ \\
+            Y      & \texttt{y}   & Real & $[0, 1]$ \\
+            Ângulo & \texttt{dir} & Real & $[0, 360]$ \\
+            \bottomrule
+        \end{tabular}
+        \caption{%
+            Entradas utilizadas para o sistema em questão. Cada entrada pode
+            receber um valor fora de seu intervalo esperado, porém o
+            comportamento resultante não pode ser previsto nesse
+            caso.\label{system-entries}
+        }
+    \end{table}
+
+    Os conjuntos fuzzy (visualizáveis na Figura~\ref{fuzzy-sets}) foram
+    definidos pensando em:
+
+    \begin{itemize}
+        \item O quão longe o caminhão está horizontalmente, separando em:
+            ``muito para a esquerda'', ``muito para a direita'' e
+            ``centralizado'';
+        \item O quão longe o caminhão está verticalmente, separando em: ``muito
+            longe'' e ``próximo'';
+        \item A direção da traseira do caminhão, separada em: norte, sul, leste
+            e oeste.
+    \end{itemize}
 
     \begin{figure}[ht]
         \centering{}
@@ -71,16 +104,23 @@
         }
     \end{figure}
 
+    \subsection{Regras utilizadas e Defuzzificação}
+
+    O sistema modelado dá como saída uma variável chamada de ``Ação''
+    (\texttt{action} na Figura~\ref{fuzzy-sets}), que pode ser:
+
     \begin{itemize}
-        \item O quão longe o caminhão está horizontalmente, separando em:
-            ``muito para a esquerda'', ``muito para a direita'' e
-            ``centralizado'';
-        \item O quão longe o caminhão está verticalmente, separando em: ``muito
-            longe'' e ``próximo'';
-        \item A direção do caminhão, separada em: norte, sul, leste e oeste.
+        \item Virar o volante para a direita (valores de -1 a 0);
+        \item Virar o volante para a esquerda (valores de 0 a 1);
     \end{itemize}
 
-    \subsection{Regras utilizadas e Defuzzificação}
+    Por consequência da inferência do sistema Fuzzy, ``0'' corresponde a ``Não
+    virar''. Anteriormente havia sido definido um intervalo específico para
+    essa ação, centralizado em ``0'', porém ele se mostrou desnecessário e
+    ineficiente, porque uma decisão que deveria ter um alto grau de pertinência
+    para ``Não virar'' já terá, de acordo com as regras, um baixo grau de
+    pertencimento aos conjuntos respectivos às outras ações. Consequentemente,
+    tal decisão já terá um valor próximo do zero esperado.
 
     Por simplicidade, as regras definidas foram:
 
@@ -88,42 +128,104 @@
         \item Muito para a esquerda $\land$ Norte $\rightarrow$ Virar para a
             direita
         \item Muito para a esquerda $\land$ Muito longe $\land$ Leste
-            $\rightarrow$ virar para a direita
+            $\rightarrow$ Virar para a direita
         \item Muito para a esquerda $\land$ Muito longe $\land$ Sul
-            $\rightarrow$ virar para a esquerda
+            $\rightarrow$ Virar para a esquerda
         \item Centralizado $\land$ Oeste $\rightarrow$ Virar para a esquerda
         \item Centralizado $\land$ Norte $\rightarrow$ Virar para a esquerda
         \item Centralizado $\land$ Leste $\rightarrow$ Virar para a direita
         \item Muito para a direita $\land$ Norte $\rightarrow$ Virar para a
             esquerda
         \item Muito para a direita $\land$ Muito longe $\land$ Oeste
-            $\rightarrow$ virar para a esquerda
+            $\rightarrow$ Virar para a esquerda
         \item Muito para a direita $\land$ Muito longe $\land$ Sul
-            $\rightarrow$ virar para a direita
+            $\rightarrow$ Virar para a direita
     \end{itemize}
 
-    A ação é defuzzificada dos conjuntos ``virar para a direita'' ou ``virar
-    para a esquerda'' para um valor no intervalo $[-1, 1]$. Um conjunto para a
-    ação de ``não virar'' foi experimentado, mas ele se mostrou desnecessário e
-    ineficiente, porque uma decisão que deveria ter um alto grau de pertinência
-    para ``não virar'' já terá, de acordo com as regras, um baixo grau de
-    pertencimento aos conjuntos respectivos às outras ações. Consequentemente,
-    tal decisão já terá um valor próximo do zero esperado.
+    A ação é defuzzificada dos conjuntos da saída ``Ação'' para um valor no
+    intervalo $[-1, 1]$ utilizando o método do \textbf{Centro de Gravidade}.
 
-    \section{Conclusões e considerações}
+    \section{Resultados obtidos}
+
+    Diversos testes com diferentes valores de entrada foram feitos. Serão
+    expostos aqui apenas três deles, escolhidos da forma: utilizando as
+    configurações iniciais do programa de simulação
+    (Figura~\ref{figure-test-default}), utilizando um caso trivial
+    (Figura~\ref{figure-test-trivial}) e utilizando um \textit{corner-case}
+    (Figura~\ref{figure-test-corner}). A Tabela~\ref{test-params} descreve os
+    parâmetros utilizados em cada cenário.
+
+    \begin{table}[ht]
+        \centering{}
+        \begin{tabular}{c c c c c c}
+            \toprule
+            Teste   & Passo & $X_0$ & $Y_0$ & Ângulo & Pontuação \\
+            \midrule
+            Padrão  & 1     & 0.2   & 0.2   & 30     & 9904.47   \\
+            Trivial & 1     & 0.5   & 0.2   & 90     & 9996.00   \\
+            \textit{Corner-case} & 1 & 0.8 & 0.8 & 160 & 9821.47   \\
+            \bottomrule
+        \end{tabular}
+        \caption{%
+            Parâmetros e pontuação para cada um dos casos de teste
+            expostos.\label{test-params}
+        }
+    \end{table}
+
+    Nos dois primeiros casos, o sistema conseguiu responder bem aos estímulos e
+    levar o caminhão ao destino correto. No último, porém, a reação foi levar o
+    caminhão apenas para baixo. Houveram tentativas, conforme mencionado mais à
+    frente nas dificuldades encontradas para a modelagem, de resolver casos
+    semelhantes com regras mais específicas (como, por exemplo, definir que
+    quando o caminhão está muito próximo de $Y = 1$ deve contornar pelo outro
+    lado), porém isso degradava outros resultados e nem sempre fazia o caminhão
+    chegar ao seu destino.
+
+    \begin{figure}[ht]
+        \centering{}
+        \includegraphics[keepaspectratio,width=0.25\textwidth]{img/test-default}
+        \caption{%
+            Trajetória do caminhão no caso padrão, utilizando as configurações
+            iniciais do programa de simulação.\label{figure-test-default}
+        }
+    \end{figure}
+
+    \begin{figure}[ht]
+        \centering{}
+        \includegraphics[keepaspectratio,width=0.25\textwidth]{img/test-trivial}
+        \caption{%
+            Trajetória do caminhão no caso trivial, em que o caminhão deve ir
+            apenas reto.\label{figure-test-trivial}
+        }
+    \end{figure}
+
+    \begin{figure}[ht]
+        \centering{}
+        \includegraphics[keepaspectratio,width=0.25\textwidth]{img/test-corner}
+        \caption{%
+            Trajetória do caminhão no \textit{corner-case}. É evidente que o
+            sistema não resolve esse caso.\label{figure-test-corner}
+        }
+    \end{figure}
+
+    \section{Dificuldades encontradas}
+
+    \subsection{Ferramental}
 
     Devido à vontade de aventura, os alunos decidiram utilizar o gerador de
     código C++ a partir de FCL (linguagem de descrição de sistemas Fuzzy) pelo
     jFuzzyLogic (biblioteca e programa para funcionalidades relacionadas a
-    lógica Fuzzy, incluindo geração de gráficos). Um pouco fora do esperado,
-    foram feitos alguns passos extras como: melhoria do código gerado,
-    separação das declarações em header, e implementação simples de uma API
-    Socket em C++. Porém, tendo esses passos prontos, os ajustes e criação das
-    regras e parâmetros do sistema para o FuzzyTruck foram mais triviais. Como
-    FCL obriga a enumeração de regras, para melhorar a produtividade criou-se
-    um pequeno script em Python que gerava o arquivo FCL a partir de regras
-    definidas em uma lista de \texttt{Rule}s (uma tupla com os valores
-    esperados e o valor de saída para a regra).
+    lógica Fuzzy, incluindo geração de gráficos). Porém, um pouco fora do
+    esperado, isso acarretour na necessidade de passos extras como: melhoria do
+    código gerado, separação das declarações em header, e implementação simples
+    de uma API Socket em C++. Porém, tendo esses passos prontos, os ajustes e
+    criação das regras e parâmetros do sistema para o FuzzyTruck foram mais
+    triviais. Como FCL obriga a enumeração de regras, para melhorar a
+    produtividade criou-se um pequeno script em Python que gerava o arquivo FCL
+    a partir de regras definidas em uma lista de \texttt{Rule}s (uma tupla com
+    os valores esperados e o valor de saída para a regra).
+
+    \subsection{Modelagem da solução}
 
     Da parte da definição das regras, diferentes abordagens foram tomadas
     tentando ser o mais restritivo possível: utilização de pontos colaterais
