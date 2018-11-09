@@ -9,6 +9,13 @@ Dependências
 - Python 3;
 - Um compilador LaTeX (para geração do relatório).
 
+Arquivos importantes
+--------------------
+
+Para avaliação da solução do sistema Fuzzy proposto, o
+[arquivo FCL](fcl/truck.fcl) e o [Cliente Socket](src/main.cpp) devem ser o
+suficiente.
+
 Como utilizar
 -------------
 
