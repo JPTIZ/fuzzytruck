@@ -38,7 +38,6 @@ class FunctionBlockTruck {
     void fuzzify();
     void reset();
     double membership_action_left(double x);
-    double membership_action_none(double x);
     double membership_action_right(double x);
     double membership_dir_east(double x);
     double membership_dir_north(double x);

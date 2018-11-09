@@ -1,3 +1,4 @@
+#include <cmath>
 #include <iostream>
 #include <sstream>
 #include <string>
@@ -72,11 +73,13 @@ int main(int argc, char* argv[]) {
     );
 
     auto truck = fuzzytruck::FunctionBlockTruck{};
+    truck.action = 0.0;
 
     while (true) {
         auto [x, y, angle] = truck_position(socket);
 
-        if ((x >= 0.45 or x <= 0.55) and y > 1) {
+        if ((x >= 0.45 or x <= 0.55) and y > 1.0) {
+            std::cout << "breaking the law" << std::endl;
             break;
         }
 
@@ -87,8 +90,12 @@ int main(int argc, char* argv[]) {
         truck.calc();
         truck.print();
 
-        auto action = std::to_string(truck.action);
-        std::cout << "sending " << action << ";\n";
+        auto _action = truck.action;
+        if (std::isnan(_action)) {
+            _action = 0.0;
+        }
+        auto action = std::to_string(_action);
+        std::cout << "sending " << action << " (was " << truck.action << ")" << ";\n";
         socket.send(action + "\n");
     }
 }

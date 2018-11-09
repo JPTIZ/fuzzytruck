@@ -1,6 +1,8 @@
 from typing import NamedTuple
+from sys import argv
 
-STUB = '''
+
+BODY = '''
 function_block truck
 
 var_input
@@ -21,7 +23,6 @@ end_fuzzify
 
 fuzzify y
     term far   := (0.0, 0) (1.00, 1);
-    // term not far := (0.33, 0) (1.0, 1);
 end_fuzzify
 
 fuzzify dir
@@ -32,14 +33,11 @@ fuzzify dir
     term east      := ( 90, 0) (180, 1) (270, 0);
 
     term north     := (180, 0) (270, 1) (360, 0);
-
-    // term really_south := ( 80, 0) ( 90, 1) (100, 0);
 end_fuzzify
 
 defuzzify action
-    term left  := (-1, 1) (0, 0);
-    term none  := (-1, 0) (0, 1) (1, 0);
-    term right :=         (0, 0) (1, 1);
+    term right := (-1, 1) (0, 0);
+    term left  :=         (0, 0) (1, 1);
 
     method: cog;
     default := 0;
@@ -49,8 +47,6 @@ ruleblock truck_rules
     and: min;
     act: min;
     accu: max;
-
-
 '''
 
 
@@ -69,23 +65,27 @@ class Rule(NamedTuple):
 
 
 if __name__ == '__main__':
+    try:
+        filename = argv[1]
+    except IndexError:
+        print(f'Usage: {argv[0]} <output>')
+        exit(1)
+
     rules = [
-        # Rule(x='left',  dir='south',  action='right'),
-        # Rule(x='right',   dir='north',  action='right'),
+        Rule(x='left',    dir='north',  action='right'),
+        Rule(x='left',    dir='east',   y='far', action='right'),
+        Rule(x='left',    dir='south',  y='far', action='left'),
 
-        Rule(x='left',    dir='north',  action='left'),
-        Rule(x='right',   dir='north',  action='right'),
-        Rule(x='center',  dir='east',   action='left'),
-        Rule(x='center',  dir='west',   action='right'),
-        Rule(x='center',  dir='north',  action='right'),
+        Rule(x='center',  dir='north',  action='left'),
+        Rule(x='center',  dir='east',   action='right'),
+        Rule(x='center',  dir='west',   action='left'),
 
-        Rule(x='left',    dir='south',  y='far',          action='right'),
-        Rule(x='left',    dir='east',   y='far',          action='left'),
-        Rule(x='right',   dir='south',  y='far',          action='left'),
-        Rule(x='right',   dir='west',   y='far',          action='right'),
+        Rule(x='right',   dir='north',  action='left'),
+        Rule(x='right',   dir='west',   y='far', action='left'),
+        Rule(x='right',   dir='south',  y='far', action='right'),
     ]
 
-    contents = STUB
+    contents = BODY
     for i, (x, y, dir, action) in enumerate(rules):
         cond = ''
         if x is not None:
@@ -101,6 +101,7 @@ if __name__ == '__main__':
                 cond += ' and '
             cond += f' dir is {dir} '
         contents += f'\n    rule {i+1}: if {cond} then action is {action}; '
+
     contents += THE_END
-    with open('truck.fcl', 'w') as f:
+    with open(filename, 'w') as f:
         f.write(contents)
